@@ -348,9 +348,9 @@
                 } catch (error) {
                     console.error('获取图片时出错:', error);
                     if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
-                        showStatus(`无法连接到本地代理服务器。请确保已启动后端服务 (node server.js)，且运行在 ${BACKEND_PROXY_URL}`, 'error');
+                        showStatus(`无法连接到服务器。`, 'error');
                     } else if (error.message.includes('代理服务器错误')) {
-                        showStatus(`错误: ${error.message}。请检查代理服务器终端日志。`, 'error');
+                        showStatus(`错误: ${error.message}。服务器问题请忽略。`, 'error');
                     } else {
                         showStatus(`出错: ${error.message}`, 'error');
                     }
@@ -386,3 +386,4 @@
 </body>
 
 </html>
+
