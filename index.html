@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lolicon API</title>
+    <title>91色图</title>
     <link rel="icon" href="R-C.png">
     <style>
         * {
@@ -317,10 +317,10 @@
                     }
                     
                     const data = await response.json();
-                    console.log('从代理服务器收到的完整响应:', data);
+                    console.log('从服务器收到的完整响应:', data);
                     
                     if (data.error) {
-                        throw new Error(`Lolicon API错误: ${data.error}`);
+                        throw new Error(`API错误: ${data.error}`);
                     }
                     
                     if (!data.data || data.data.length === 0) {
@@ -386,4 +386,5 @@
 </body>
 
 </html>
+
 
