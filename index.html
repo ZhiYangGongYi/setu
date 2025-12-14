@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lolicon API</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        body {
+            background-color: #f5f5f7;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .container {
+            background-color: #fff;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: #2c3e50;
+            text-align: center;
+        }
+        .description {
+            color: #666;
+            margin-bottom: 24px;
+            text-align: center;
+            font-size: 0.95rem;
+            padding: 0 10px;
+        }
+        .note-box {
+            background-color: #e8f4fd;
+            border-left: 4px solid #2196F3;
+            padding: 12px 16px;
+            margin-bottom: 24px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+        .note-box strong {
+            color: #1565c0;
+        }
+        .search-box {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        #keywordInput {
+            flex: 1;
+            min-width: 200px;
+            padding: 16px 20px;
+            border: 2px solid #e1e5e9;
+            border-radius: 50px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            outline: none;
+        }
+        #keywordInput:focus {
+            border-color: #7e8cff;
+        }
+        #searchBtn {
+            padding: 16px 32px;
+            background: linear-gradient(135deg, #7e8cff, #6a5af9);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            white-space: nowrap;
+        }
+        #searchBtn:hover, #searchBtn:active {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(106, 90, 249, 0.3);
+        }
+        #searchBtn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .result-area {
+            margin-top: 30px;
+            text-align: center;
+        }
+        #statusText {
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            min-height: 24px;
+            font-size: 0.95rem;
+        }
+        #statusText.loading {
+            background-color: #e3f2fd;
+            color: #1565c0;
+        }
+        #statusText.error {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+        #imageContainer {
+            margin-top: 20px;
+            display: none;
+        }
+        #resultImage {
+            max-width: 100%;
+            max-height: 70vh;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            display: block;
+            margin: 0 auto;
+        }
+        .image-info {
+            margin-top: 20px;
+            padding: 16px;
+            background-color: #f9f9fb;
+            border-radius: 12px;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+        .image-info p {
+            margin-bottom: 8px;
+            word-break: break-all;
+        }
+        .info-label {
+            font-weight: 600;
+            color: #555;
+            display: inline-block;
+            min-width: 60px;
+        }
+        .r18-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 12px 16px;
+            background-color: #f9f9fb;
+            border-radius: 12px;
+        }
+        #r18Toggle {
+            width: 50px;
+            height: 26px;
+            background-color: #ddd;
+            border-radius: 13px;
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        #r18Toggle.active {
+            background-color: #6a5af9;
+        }
+        #r18Toggle::after {
+            content: '';
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            background-color: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s;
+        }
+        #r18Toggle.active::after {
+            transform: translateX(24px);
+        }
+        .hint {
+            font-size: 0.85rem;
+            color: #888;
+            margin-top: 10px;
+            line-height: 1.5;
+        }
+        @media (max-width: 600px) {
+            body {
+                padding: 16px;
+            }
+            .container {
+                padding: 20px 16px;
+            }
+            .search-box {
+                flex-direction: column;
+            }
+            #keywordInput, #searchBtn {
+                width: 100%;
+            }
+            #searchBtn {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨随机色图</h1>
+        <p class="description">
+            保持内裤干燥。
+        </p>
+        
+        <div class="note-box">
+            <strong>使用须知：</strong> <code>立的是gay，骗你的不立也是。</code>
+        </div>
+        
+        <div class="r18-control">
+            <div>允许R18：</div>
+            <div id="r18Toggle" class="active"></div>
+            <div>(开启时可能返回成人内容)</div>
+        </div>
+        
+        <div class="search-box">
+            <input 
+                type="text" 
+                id="keywordInput" 
+                placeholder="请输入关键词，例如：初音 萝莉 风景..."
+                value="萝莉"
+                autocomplete="off"
+            >
+            <button id="searchBtn">随机搜索图片</button>
+        </div>
+        
+        <p class="hint">
+            💡 提示：允许R18一定要关闭！
+        </p>
+        
+        <div class="result-area">
+            <div id="statusText"></div>
+            
+            <div id="imageContainer">
+                <img id="resultImage" alt="API返回的随机图片">
+                <div class="image-info" id="imageInfo"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const keywordInput = document.getElementById('keywordInput');
+            const searchBtn = document.getElementById('searchBtn');
+            const statusText = document.getElementById('statusText');
+            const imageContainer = document.getElementById('imageContainer');
+            const resultImage = document.getElementById('resultImage');
+            const imageInfo = document.getElementById('imageInfo');
+            const r18Toggle = document.getElementById('r18Toggle');
+            
+            let r18Enabled = 1;
+            const BACKEND_PROXY_URL = 'http://103.45.162.207:50301/api/get-setu';
+
+            r18Toggle.addEventListener('click', function() {
+                if (r18Enabled === 1) {
+                    r18Enabled = 0; // 禁用R18
+                    this.classList.remove('active');
+                } else if (r18Enabled === 0) {
+                    r18Enabled = 2;
+                    this.classList.add('active');
+                } else {
+
+                    r18Enabled = 1;
+                }
+            });
+
+            searchBtn.addEventListener('click', fetchRandomImage);
+            keywordInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') fetchRandomImage();
+            });
+
+            async function fetchRandomImage() {
+                const keyword = keywordInput.value.trim();
+                
+                if (!keyword) {
+                    showStatus('请输入搜索关键词', 'error');
+                    return;
+                }
+
+                searchBtn.disabled = true;
+                searchBtn.textContent = '搜索中...';
+                showStatus('请求图片...', 'loading');
+                imageContainer.style.display = 'none';
+                
+                try {
+                    const requestData = {
+                        tag: keyword.split(' ').filter(tag => tag.trim() !== ''),
+                        r18: r18Enabled,
+                        size: ["regular"], // 请求regular尺寸图片
+                        num: 1
+                    };
+                    
+                    console.log('向前端代理发送请求数据:', requestData);
+
+                    const response = await fetch(BACKEND_PROXY_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(requestData)
+                    });
+                    
+                    console.log('代理服务器响应状态:', response.status);
+                    
+                    if (!response.ok) {
+                        let errorMsg = `代理服务器错误: ${response.status}`;
+                        try {
+                            const errorData = await response.json();
+                            errorMsg = errorData.error || errorMsg;
+                        } catch(e) {
+                        }
+                        throw new Error(errorMsg);
+                    }
+                    
+                    const data = await response.json();
+                    console.log('从代理服务器收到的完整响应:', data);
+                    
+                    if (data.error) {
+                        throw new Error(`Lolicon API错误: ${data.error}`);
+                    }
+                    
+                    if (!data.data || data.data.length === 0) {
+                        showStatus(`没有找到与"${keyword}"相关的图片，请尝试其他关键词。`, 'error');
+                        return;
+                    }
+
+                    const imageData = data.data[0];
+                    const imageUrl = imageData.urls.regular;
+
+                    await loadImage(imageUrl);
+
+                    resultImage.src = imageUrl;
+                    imageInfo.innerHTML = `
+                        <p><span class="info-label">标题:</span> ${imageData.title || '无标题'}</p>
+                        <p><span class="info-label">作者:</span> ${imageData.author || '未知'}</p>
+                        <p><span class="info-label">PID:</span> ${imageData.pid || '未知'}</p>
+                        <p><span class="info-label">标签:</span> ${imageData.tags ? imageData.tags.join(', ') : '无'}</p>
+                        <p><span class="info-label">原图:</span> <a href="${imageUrl}" target="_blank">点击查看</a></p>
+                    `;
+                    
+                    imageContainer.style.display = 'block';
+                    showStatus(`成功获取到与"${keyword}"相关的图片！`, 'success');
+                    
+                } catch (error) {
+                    console.error('获取图片时出错:', error);
+                    if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+                        showStatus(`无法连接到本地代理服务器。请确保已启动后端服务 (node server.js)，且运行在 ${BACKEND_PROXY_URL}`, 'error');
+                    } else if (error.message.includes('代理服务器错误')) {
+                        showStatus(`错误: ${error.message}。请检查代理服务器终端日志。`, 'error');
+                    } else {
+                        showStatus(`出错: ${error.message}`, 'error');
+                    }
+                } finally {
+                    searchBtn.disabled = false;
+                    searchBtn.textContent = '随机搜索图片';
+                }
+            }
+
+            function loadImage(url) {
+                return new Promise((resolve, reject) => {
+                    const img = new Image();
+                    img.onload = () => resolve();
+                    img.onerror = () => reject(new Error('图片加载失败'));
+                    img.src = url;
+                });
+            }
+
+            function showStatus(message, type = 'normal') {
+                statusText.textContent = message;
+                statusText.className = '';
+                
+                if (type === 'loading') {
+                    statusText.classList.add('loading');
+                } else if (type === 'error') {
+                    statusText.classList.add('error');
+                }
+            }
+
+            showStatus('请确保已连接网络，然后输入关键词进行搜索。', 'normal');
+        });
+    </script>
+</body>
+</html>
