@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lolicon API</title>
+    <link rel="icon" href="R-C.png">
     <style>
         * {
             box-sizing: border-box;
@@ -201,7 +202,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>🎨随机色图</h1>
+        <h1>🎨91色图</h1>
         <p class="description">
             保持内裤干燥。
         </p>
@@ -256,7 +257,7 @@
 
             r18Toggle.addEventListener('click', function() {
                 if (r18Enabled === 1) {
-                    r18Enabled = 0; // 禁用R18
+                    r18Enabled = 0;
                     this.classList.remove('active');
                 } else if (r18Enabled === 0) {
                     r18Enabled = 2;
@@ -289,7 +290,7 @@
                     const requestData = {
                         tag: keyword.split(' ').filter(tag => tag.trim() !== ''),
                         r18: r18Enabled,
-                        size: ["regular"], // 请求regular尺寸图片
+                        size: ["regular"],
                         num: 1
                     };
                     
@@ -383,4 +384,5 @@
         });
     </script>
 </body>
+
 </html>
