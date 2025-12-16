@@ -529,7 +529,6 @@
                                     <p><span class="info-label">PID:</span> ${imageData.pid || '未知'}</p>
                                     <p><span class="info-label">UID:</span> ${imageData.uid || '未知'}</p>
                                     <p><span class="info-label">上传时间:</span> ${imageData.uploadDate ? new Date(imageData.uploadDate).toLocaleDateString() : '未知'}</p>
-                                    <p><span class="info-label">AI生成:</span> ${imageData.aiType === 1 ? '是' : '否'}</p>
                                     <p><span class="info-label">标签:</span> ${imageData.tags ? imageData.tags.join(', ') : '无'}</p>
                                     <p><span class="info-label">原图:</span> <a href="${imageUrl}" target="_blank">点击查看</a></p>
                                 </div>
