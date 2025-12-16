@@ -17,7 +17,7 @@
             color: #333;
             line-height: 1.6;
             padding: 20px;
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
         }
         .container {
@@ -49,6 +49,104 @@
         }
         .note-box strong {
             color: #1565c0;
+        }
+        .controls-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .control-group {
+            background-color: #f9f9fb;
+            padding: 18px;
+            border-radius: 12px;
+            border: 1px solid #eee;
+        }
+        .control-group h3 {
+            font-size: 1rem;
+            margin-bottom: 15px;
+            color: #444;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .control-item {
+            margin-bottom: 15px;
+        }
+        .control-item label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #555;
+            font-size: 0.9rem;
+        }
+        .control-item input[type="text"],
+        .control-item input[type="date"],
+        .control-item input[type="number"],
+        .control-item select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: border-color 0.3s;
+            outline: none;
+        }
+        .control-item input:focus,
+        .control-item select:focus {
+            border-color: #7e8cff;
+        }
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 8px;
+        }
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .checkbox-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+        }
+        .toggle-switch {
+            width: 50px;
+            height: 26px;
+            background-color: #ddd;
+            border-radius: 13px;
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            flex-shrink: 0;
+        }
+        .toggle-switch.active {
+            background-color: #6a5af9;
+        }
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            background-color: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s;
+        }
+        .toggle-switch.active::after {
+            transform: translateX(24px);
+        }
+        .toggle-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        .toggle-label {
+            font-weight: 500;
+            color: #555;
         }
         .search-box {
             display: flex;
@@ -110,25 +208,36 @@
             background-color: #ffebee;
             color: #c62828;
         }
-        #imageContainer {
+        #imagesContainer {
             margin-top: 20px;
             display: none;
         }
-        #resultImage {
-            max-width: 100%;
-            max-height: 70vh;
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .image-item {
+            background-color: #fff;
             border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .image-item:hover {
+            transform: translateY(-4px);
+        }
+        .result-image {
+            width: 100%;
+            height: auto;
             display: block;
-            margin: 0 auto;
         }
         .image-info {
-            margin-top: 20px;
             padding: 16px;
-            background-color: #f9f9fb;
-            border-radius: 12px;
             text-align: left;
             font-size: 0.9rem;
+            border-top: 1px solid #eee;
         }
         .image-info p {
             margin-bottom: 8px;
@@ -139,41 +248,6 @@
             color: #555;
             display: inline-block;
             min-width: 60px;
-        }
-        .r18-control {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
-            padding: 12px 16px;
-            background-color: #f9f9fb;
-            border-radius: 12px;
-        }
-        #r18Toggle {
-            width: 50px;
-            height: 26px;
-            background-color: #ddd;
-            border-radius: 13px;
-            position: relative;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        #r18Toggle.active {
-            background-color: #6a5af9;
-        }
-        #r18Toggle::after {
-            content: '';
-            position: absolute;
-            width: 22px;
-            height: 22px;
-            background-color: white;
-            border-radius: 50%;
-            top: 2px;
-            left: 2px;
-            transition: transform 0.3s;
-        }
-        #r18Toggle.active::after {
-            transform: translateX(24px);
         }
         .hint {
             font-size: 0.85rem;
@@ -188,6 +262,10 @@
             .container {
                 padding: 20px 16px;
             }
+            .controls-panel {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
             .search-box {
                 flex-direction: column;
             }
@@ -196,6 +274,9 @@
             }
             #searchBtn {
                 padding: 18px;
+            }
+            .image-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -211,10 +292,68 @@
             <strong>使用须知：</strong> <code>立的是gay，骗你的不立也是。</code>
         </div>
         
-        <div class="r18-control">
-            <div>允许R18：</div>
-            <div id="r18Toggle" class="active"></div>
-            <div>(开启时可能返回成人内容)</div>
+        <div class="controls-panel">
+            <div class="control-group">
+                <h3>🎯 内容筛选</h3>
+                <div class="toggle-item">
+                    <div class="toggle-label">允许R18</div>
+                    <div id="r18Toggle" class="toggle-switch active"></div>
+                </div>
+                <div class="toggle-item">
+                    <div class="toggle-label">排除AI作品</div>
+                    <div id="excludeAiToggle" class="toggle-switch"></div>
+                </div>
+                <div class="toggle-item">
+                    <div class="toggle-label">降序排序（最新）</div>
+                    <div id="descToggle" class="toggle-switch active"></div>
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <h3>📅 日期范围</h3>
+                <div class="control-item">
+                    <label for="dateAfter">起始日期</label>
+                    <input type="date" id="dateAfter">
+                </div>
+                <div class="control-item">
+                    <label for="dateBefore">结束日期</label>
+                    <input type="date" id="dateBefore">
+                </div>
+                <div class="hint">留空则不限制日期</div>
+            </div>
+            
+            <div class="control-group">
+                <h3>🖼️ 图片设置</h3>
+                <div class="control-item">
+                    <label for="proxyInput">图片代理地址</label>
+                    <input type="text" id="proxyInput" placeholder="不建议修改，默认：i.pixiv.re">
+                </div>
+                <div class="control-item">
+                    <label>图片尺寸</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="sizeOriginal" value="original" checked>
+                            <label for="sizeOriginal">原图</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="sizeRegular" value="regular" checked>
+                            <label for="sizeRegular">常规</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="sizeSmall" value="small">
+                            <label for="sizeSmall">小图</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="sizeThumb" value="thumb">
+                            <label for="sizeThumb">缩略图</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="control-item">
+                    <label for="numInput">获取数量 (1-100)</label>
+                    <input type="number" id="numInput" min="1" max="100" value="1">
+                </div>
+            </div>
         </div>
         
         <div class="search-box">
@@ -235,9 +374,8 @@
         <div class="result-area">
             <div id="statusText"></div>
             
-            <div id="imageContainer">
-                <img id="resultImage" alt="API返回的随机图片">
-                <div class="image-info" id="imageInfo"></div>
+            <div id="imagesContainer">
+                <div class="image-grid" id="imageGrid"></div>
             </div>
         </div>
     </div>
@@ -247,12 +385,19 @@
             const keywordInput = document.getElementById('keywordInput');
             const searchBtn = document.getElementById('searchBtn');
             const statusText = document.getElementById('statusText');
-            const imageContainer = document.getElementById('imageContainer');
-            const resultImage = document.getElementById('resultImage');
-            const imageInfo = document.getElementById('imageInfo');
+            const imagesContainer = document.getElementById('imagesContainer');
+            const imageGrid = document.getElementById('imageGrid');
             const r18Toggle = document.getElementById('r18Toggle');
+            const excludeAiToggle = document.getElementById('excludeAiToggle');
+            const descToggle = document.getElementById('descToggle');
+            const dateAfterInput = document.getElementById('dateAfter');
+            const dateBeforeInput = document.getElementById('dateBefore');
+            const proxyInput = document.getElementById('proxyInput');
+            const numInput = document.getElementById('numInput');
             
             let r18Enabled = 1;
+            let excludeAiEnabled = false;
+            let descEnabled = true;
             const BACKEND_PROXY_URL = 'http://103.45.162.207:50301/api/get-setu';
 
             r18Toggle.addEventListener('click', function() {
@@ -263,17 +408,26 @@
                     r18Enabled = 2;
                     this.classList.add('active');
                 } else {
-
                     r18Enabled = 1;
                 }
             });
 
-            searchBtn.addEventListener('click', fetchRandomImage);
-            keywordInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') fetchRandomImage();
+            excludeAiToggle.addEventListener('click', function() {
+                excludeAiEnabled = !excludeAiEnabled;
+                this.classList.toggle('active', excludeAiEnabled);
             });
 
-            async function fetchRandomImage() {
+            descToggle.addEventListener('click', function() {
+                descEnabled = !descEnabled;
+                this.classList.toggle('active', descEnabled);
+            });
+
+            searchBtn.addEventListener('click', fetchRandomImages);
+            keywordInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') fetchRandomImages();
+            });
+
+            async function fetchRandomImages() {
                 const keyword = keywordInput.value.trim();
                 
                 if (!keyword) {
@@ -284,17 +438,43 @@
                 searchBtn.disabled = true;
                 searchBtn.textContent = '搜索中...';
                 showStatus('请求图片...', 'loading');
-                imageContainer.style.display = 'none';
+                imagesContainer.style.display = 'none';
+                imageGrid.innerHTML = '';
                 
                 try {
+                    const sizeOptions = [];
+                    if (document.getElementById('sizeOriginal').checked) sizeOptions.push('original');
+                    if (document.getElementById('sizeRegular').checked) sizeOptions.push('regular');
+                    if (document.getElementById('sizeSmall').checked) sizeOptions.push('small');
+                    if (document.getElementById('sizeThumb').checked) sizeOptions.push('thumb');
+                    
+                    if (sizeOptions.length === 0) {
+                        showStatus('请至少选择一种图片尺寸', 'error');
+                        return;
+                    }
+
                     const requestData = {
                         tag: keyword.split(' ').filter(tag => tag.trim() !== ''),
                         r18: r18Enabled,
-                        size: ["regular"],
-                        num: 1
+                        size: sizeOptions,
+                        num: parseInt(numInput.value) || 1,
+                        excludeAI: excludeAiEnabled,
+                        dsc: descEnabled
                     };
+
+                    if (dateAfterInput.value) {
+                        requestData.dateAfter = Math.floor(new Date(dateAfterInput.value).getTime() / 1000);
+                    }
                     
-                    console.log('向前端代理发送请求数据:', requestData);
+                    if (dateBeforeInput.value) {
+                        requestData.dateBefore = Math.floor(new Date(dateBeforeInput.value).getTime() / 1000);
+                    }
+                    
+                    if (proxyInput.value.trim()) {
+                        requestData.proxy = proxyInput.value.trim();
+                    }
+
+                    console.log('请求数据:', requestData);
 
                     const response = await fetch(BACKEND_PROXY_URL, {
                         method: 'POST',
@@ -304,52 +484,72 @@
                         body: JSON.stringify(requestData)
                     });
                     
-                    console.log('代理服务器响应状态:', response.status);
+                    console.log('响应状态:', response.status);
                     
                     if (!response.ok) {
-                        let errorMsg = `代理服务器错误: ${response.status}`;
+                        let errorMsg = `服务器错误: ${response.status}`;
                         try {
                             const errorData = await response.json();
                             errorMsg = errorData.error || errorMsg;
-                        } catch(e) {
-                        }
+                        } catch(e) {}
                         throw new Error(errorMsg);
                     }
                     
                     const data = await response.json();
-                    console.log('从服务器收到的完整响应:', data);
+                    console.log('完整响应:', data);
                     
                     if (data.error) {
                         throw new Error(`API错误: ${data.error}`);
                     }
                     
                     if (!data.data || data.data.length === 0) {
-                        showStatus(`没有找到与"${keyword}"相关的图片，请尝试其他关键词。`, 'error');
+                        showStatus(`没有找到与"${keyword}"相关的图片，请尝试其他关键词或调整筛选条件。`, 'error');
                         return;
                     }
 
-                    const imageData = data.data[0];
-                    const imageUrl = imageData.urls.regular;
+                    const images = data.data;
+                    let loadedImages = 0;
+                    const totalImages = images.length;
 
-                    await loadImage(imageUrl);
-
-                    resultImage.src = imageUrl;
-                    imageInfo.innerHTML = `
-                        <p><span class="info-label">标题:</span> ${imageData.title || '无标题'}</p>
-                        <p><span class="info-label">作者:</span> ${imageData.author || '未知'}</p>
-                        <p><span class="info-label">PID:</span> ${imageData.pid || '未知'}</p>
-                        <p><span class="info-label">标签:</span> ${imageData.tags ? imageData.tags.join(', ') : '无'}</p>
-                        <p><span class="info-label">原图:</span> <a href="${imageUrl}" target="_blank">点击查看</a></p>
-                    `;
+                    for (const imageData of images) {
+                        const imageUrl = imageData.urls.regular || imageData.urls.original;
+                        
+                        try {
+                            await loadImage(imageUrl);
+                            loadedImages++;
+                            
+                            const imageItem = document.createElement('div');
+                            imageItem.className = 'image-item';
+                            
+                            imageItem.innerHTML = `
+                                <img class="result-image" src="${imageUrl}" alt="${imageData.title || 'API返回的图片'}" loading="lazy">
+                                <div class="image-info">
+                                    <p><span class="info-label">标题:</span> ${imageData.title || '无标题'}</p>
+                                    <p><span class="info-label">作者:</span> ${imageData.author || '未知'}</p>
+                                    <p><span class="info-label">PID:</span> ${imageData.pid || '未知'}</p>
+                                    <p><span class="info-label">UID:</span> ${imageData.uid || '未知'}</p>
+                                    <p><span class="info-label">上传时间:</span> ${imageData.uploadDate ? new Date(imageData.uploadDate).toLocaleDateString() : '未知'}</p>
+                                    <p><span class="info-label">AI生成:</span> ${imageData.aiType === 1 ? '是' : '否'}</p>
+                                    <p><span class="info-label">标签:</span> ${imageData.tags ? imageData.tags.join(', ') : '无'}</p>
+                                    <p><span class="info-label">原图:</span> <a href="${imageUrl}" target="_blank">点击查看</a></p>
+                                </div>
+                            `;
+                            
+                            imageGrid.appendChild(imageItem);
+                            
+                        } catch (error) {
+                            console.error('加载图片失败:', error);
+                        }
+                    }
                     
-                    imageContainer.style.display = 'block';
-                    showStatus(`成功获取到与"${keyword}"相关的图片！`, 'success');
+                    imagesContainer.style.display = 'block';
+                    showStatus(`成功加载 ${loadedImages}/${totalImages} 张图片`, 'success');
                     
                 } catch (error) {
                     console.error('获取图片时出错:', error);
                     if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
                         showStatus(`无法连接到服务器。`, 'error');
-                    } else if (error.message.includes('代理服务器错误')) {
+                    } else if (error.message.includes('服务器错误')) {
                         showStatus(`错误: ${error.message}。服务器问题请忽略。`, 'error');
                     } else {
                         showStatus(`出错: ${error.message}`, 'error');
@@ -384,8 +584,4 @@
         });
     </script>
 </body>
-
 </html>
-
-
-
